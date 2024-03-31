@@ -34,12 +34,18 @@ class ProjectionLab():
 
         WebDriverWait(self.driver, timeout, 1).until(EC.presence_of_element_located((By.ID, "current-finances-section")))
     
-    
-    def updateAccount(self, accountId: str, data: dict, options: dict):
-        pass
+    def preprocess_options(self, options):
+        options = {} if options is None else options
+        options["key"] = self._plugin_key
+        return options
     
 
-    def exportData(self, options: dict):
-        options["key"] = self._plugin_key
+    def updateAccount(self, accountId: str, data: dict, options: dict = None):
+        options = self.preprocess_options(options)
+        return self.driver.execute_script(f"return window.{self.API}.updateAccount({accountId}, {json.dumps(data)}, {json.dumps(options)})")
+
+
+    def exportData(self, options: dict = None):
+        options = self.preprocess_options(options)
         return self.driver.execute_script(f"return window.{self.API}.exportData({json.dumps(options)})")
     
