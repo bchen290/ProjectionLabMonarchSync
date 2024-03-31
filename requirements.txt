@@ -1,0 +1,4 @@
+monarchmoney==0.1.11
+selenium
+webdriver-manager
+python-dotenv
